@@ -1,0 +1,14 @@
+version: 1.0.{build}
+image: Visual Studio 2015
+
+install:
+  - choco install activetcl
+
+build_script:
+  - dir c:\
+
+test_script:
+  - dir c:\
+
+deploy_script:
+  - dir c:\
