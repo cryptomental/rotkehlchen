@@ -15,6 +15,8 @@ environment:
           arch: 64
 install:
     - dir c:\
+    - ps: appveyor\variables.ps1
+    - ps: appveyor\install.ps1
 
 build_script:
     - dir c:\
