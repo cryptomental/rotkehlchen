@@ -1,14 +1,29 @@
 version: 1.0.{build}
 image: Visual Studio 2015
 
+environment:
+    python2_version: 2.7.15
+    python3_version: 3.6.0
+    tcl32_version: 8.6.6.8607
+    tcl32_revision: 403667
+    tcl64_version: 8.6.7.0
+    tcl64_revision: 404764
+    matrix:
+        - APPVEYOR_BUILD_WORKER_IMAGE: Visual Studio 2015
+          arch: 32
+        - APPVEYOR_BUILD_WORKER_IMAGE: Visual Studio 2015
+          arch: 64
 install:
-  - choco install activetcl
+    - ps: appveyor\variables.ps1
+    - ps: appveyor\install.ps1
 
 build_script:
-  - dir c:\
+    - dir c:\
 
 test_script:
-  - dir c:\
+    - python appveyor\test.py --msvc %msvc%
+    - python appveyor\check.py --python2-version %python2_version% --python3-version %python3_version% --tcl-version %tcl_version%
 
 deploy_script:
-  - dir c:\
+    - dir c:\
+
