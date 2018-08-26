@@ -6,85 +6,6 @@ $script_path = split-path -parent $MyInvocation.MyCommand.Definition
 #
 Invoke-Expression "git submodule update --init"
 
-#
-# Install Lua
-#
-
-$lua_url = "http://sourceforge.net/projects/luabinaries/files/$env:lua_version/Windows%20Libraries/Dynamic/lua-$($env:lua_version)_Win$($env:arch)_dllw4_lib.zip/download"
-$lua_output = "$env:APPVEYOR_BUILD_FOLDER\downloads\lua.zip"
-Retry-Command -Command 'Invoke-Download' -Args @{ Url = $lua_url; Filepath = $lua_output }
-Invoke-Expression "& 7z x '$lua_output' -oC:\Lua" | out-null
-$env:PATH = "C:\Lua;$env:PATH"
-
-#
-# Install Perl
-#
-
-If ($env:arch -eq 32) {
-    $perl_arch = "x86-64int"
-    $env:perl_version = $env:perl32_version
-    $perl_revision = $env:perl32_revision
-} Else {
-    $perl_arch = "x64"
-    $env:perl_version = $env:perl64_version
-    $perl_revision = $env:perl64_revision
-}
-$perl_installer_name = "ActivePerl-$env:perl_version-MSWin32-$perl_arch-$perl_revision.exe"
-$perl_url = "http://downloads.activestate.com/ActivePerl/releases/$env:perl_version/$perl_installer_name"
-$perl_output = "$env:APPVEYOR_BUILD_FOLDER\downloads\$perl_installer_name"
-Invoke-Download $perl_url $perl_output
-New-Item C:\TempActivePerl -ItemType directory | Out-Null
-Start-Process "$perl_output" -ArgumentList "/extract:C:\TempActivePerl /exenoui /exnoupdates /quiet /norestart" -Wait
-$env:perl_path = "C:\ActivePerl"
-Move-Item C:\TempActivePerl\* $env:perl_path
-$env:PATH = "$env:perl_path\bin;$env:PATH"
-
-#
-# Install Racket
-#
-
-If ($env:arch -eq 32) {
-    $racket_arch = "i386"
-} Else {
-    $racket_arch = "x86_64"
-}
-$racket_installer_name = "racket-minimal-$env:racket_version-$racket_arch-win32.exe"
-$racket_url = "https://mirror.racket-lang.org/releases/$env:racket_version/installers/$racket_installer_name"
-$racket_output = "$env:APPVEYOR_BUILD_FOLDER\downloads\$racket_installer_name"
-Invoke-Download $racket_url $racket_output
-Start-Process "$racket_output" -ArgumentList "/S /D=C:\Racket" -Wait
-
-$paths = Get-ChildItem -Path "C:\Racket\lib"
-foreach ($path in $paths)
-{
-    if ($path.Name -match "libracket(?<racket_library_version>[a-z0-9_]+)\.dll")
-    {
-        $env:racket_library_version = $matches['racket_library_version']
-        break
-    }
-}
-
-Write-Output "Racket library version: $env:racket_library_version"
-$env:PATH = "C:\Racket;C:\Racket\lib;$env:PATH"
-
-# Install Racket r5rs library required by test70.in Vim test.
-raco pkg install --auto r5rs-lib
-
-#
-# Install Ruby
-#
-
-# RubyInstaller is built with MinGW, so we cannot use header files from it.
-# Download the source files and generate config.h for MSVC.
-
-# Get the branch according to Ruby version.
-$ruby_version_array = $env:ruby_version.Split('.')
-$ruby_branch = "ruby_" + $ruby_version_array[0] + "_" + $ruby_version_array[1]
-$ruby_minimal_version = $ruby_version_array[0] + $ruby_version_array[1]
-$ruby_directory = "$env:APPVEYOR_BUILD_FOLDER\downloads\ruby"
-
-Invoke-GitClone "https://github.com/ruby/ruby.git" $ruby_directory "$ruby_branch"
-Push-Location -Path $ruby_directory
 
 # Set Visual Studio environment variables.
 If ($env:msvc -eq 15) {
@@ -109,24 +30,6 @@ Invoke-Expression "& nmake .config.h.time"
 
 Restore-Environment $old_env
 
-If ($env:msvc -eq 15) {
-    $ruby_msvc_version = "140"
-} Else {
-    $ruby_msvc_version = "$($env:msvc)0"
-}
-
-If ($env:arch -eq 32) {
-    $env:ruby_platform = "i386-mswin32_$ruby_msvc_version"
-    $env:ruby_path = "C:\Ruby$ruby_minimal_version"
-} Else {
-    $env:ruby_platform = "x64-mswin64_$ruby_msvc_version"
-    $env:ruby_path = "C:\Ruby$ruby_minimal_version-x64"
-}
-
-Copy-Item .ext\include\$env:ruby_platform $env:ruby_path\include\ruby-$env:ruby_version -Recurse
-Pop-Location
-
-$env:PATH = "$env:ruby_path\bin;$env:PATH"
 
 #
 # Install Tcl
@@ -150,57 +53,6 @@ Start-Process "$tcl_output" -ArgumentList "/quiet /norestart" -Wait
 $env:tcl_path = "C:\ActiveTcl"
 $env:PATH = "$env:tcl_path\bin;$env:PATH"
 
-#
-# Get libintl and libiconv for both architectures.
-#
-
-ForEach ($gettext_arch In 32, 64) {
-    $gettext_installer_name = "gettext0.19.8.1-iconv1.14-shared-$gettext_arch.exe"
-    $gettext_url = "https://github.com/mlocati/gettext-iconv-windows/releases/download/v0.19.8.1-v1.14/$gettext_installer_name"
-    $gettext_output = "$env:APPVEYOR_BUILD_FOLDER\downloads\$gettext_installer_name"
-    Invoke-Download $gettext_url $gettext_output
-    $gettext_dir = "C:\gettext$gettext_arch"
-    Start-Process "$gettext_output" -ArgumentList "/verysilent /dir=$gettext_dir" -Wait
-    $runtime_dir = "$env:APPVEYOR_BUILD_FOLDER\vim\runtime"
-    $gvimext_dir = "$runtime_dir\GvimExt$gettext_arch"
-    $gettext_runtime_dir = "$runtime_dir\gettext$gettext_arch"
-    New-Item $gvimext_dir -type directory
-    New-Item $gettext_runtime_dir -type directory
-    Copy-Item $gettext_dir\bin\libintl-8.dll $gvimext_dir
-    Copy-Item $gettext_dir\bin\libintl-8.dll $gettext_runtime_dir
-    Copy-Item $gettext_dir\bin\libiconv-2.dll $gvimext_dir
-    Copy-Item $gettext_dir\bin\libiconv-2.dll $gettext_runtime_dir
-    If (Test-Path $gettext_dir\bin\libgcc_s_sjlj-1.dll) {
-        Copy-Item $gettext_dir\bin\libgcc_s_sjlj-1.dll $gvimext_dir
-        Copy-Item $gettext_dir\bin\libgcc_s_sjlj-1.dll $gettext_runtime_dir
-    }
-}
-$gettext_dir = "C:\gettext$env:arch"
-$runtime_dir = "$env:APPVEYOR_BUILD_FOLDER\vim\runtime"
-Copy-Item $gettext_dir\bin\libintl-8.dll $runtime_dir
-Copy-Item $gettext_dir\bin\libiconv-2.dll $runtime_dir
-If (Test-Path $gettext_dir\bin\libgcc_s_sjlj-1.dll) {
-    Copy-Item $gettext_dir\bin\libgcc_s_sjlj-1.dll $runtime_dir
-}
-
-$env:PATH = "C:\gettext$env:arch\bin;$env:PATH"
-
-#
-# Add NSIS to PATH.
-#
-
-$env:PATH = "C:\Program Files (x86)\NSIS;$env:PATH"
-
-#
-# Install UPX.
-#
-
-$upx_archive_name = "upx391w.zip"
-$upx_url = "http://upx.sourceforge.net/download/$upx_archive_name"
-$upx_output = "$env:APPVEYOR_BUILD_FOLDER\downloads\$upx_archive_name"
-Invoke-Download $upx_url $upx_output
-Invoke-Expression "& 7z x '$upx_output' -oC:\" | out-null
-$env:PATH = "C:\upx391w;$env:PATH"
 
 #
 # Configure Python.
@@ -224,19 +76,3 @@ Invoke-Download $pip_url $pip_output
 Invoke-Expression "& python '$pip_output'"
 Invoke-Expression "& $python3_path\Scripts\pip install requests twitter"
 
-#
-# Download winpty and copy the winpty.dll and winpty-agent.exe files to the repository folder.
-#
-If ($env:arch -eq 32) {
-    $winpty_arch = "ia32"
-} Else {
-    $winpty_arch = "x64"
-}
-$winpty_archive_name = "winpty-0.4.3-msvc2015.zip"
-$winpty_url = "https://github.com/rprichard/winpty/releases/download/0.4.3/$winpty_archive_name"
-$winpty_output = "$env:APPVEYOR_BUILD_FOLDER\downloads\$winpty_archive_name"
-Invoke-Download $winpty_url $winpty_output
-Invoke-Expression "& 7z x '$winpty_output' -oC:\winpty" | out-null
-Move-Item "C:\winpty\$winpty_arch\bin\winpty.dll" $env:APPVEYOR_BUILD_FOLDER
-Move-Item "C:\winpty\$winpty_arch\bin\winpty-agent.exe" $env:APPVEYOR_BUILD_FOLDER
-$env:PATH = "$env:APPVEYOR_BUILD_FOLDER;$env:PATH"
