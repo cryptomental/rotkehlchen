@@ -14,8 +14,7 @@ environment:
         - APPVEYOR_BUILD_WORKER_IMAGE: Visual Studio 2015
           arch: 64
 install:
-    - ps: appveyor\variables.ps1
-    - ps: appveyor\install.ps1
+    - dir c:\
 
 build_script:
     - dir c:\
