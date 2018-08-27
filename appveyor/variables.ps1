@@ -18,6 +18,10 @@
 #   git_description: release notes on GitHub
 #   bintray_description: description on Bintray
 
+Function GetMajorMinorVersion($version) {
+    $version_array = $version.Split('.')
+    $version_array[0] + '.' + $version_array[1]
+}
 
 If ($env:arch -eq 32) {
     $vim_arch = "x86"
