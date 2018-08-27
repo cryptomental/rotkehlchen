@@ -15,12 +15,14 @@ environment:
           arch: 64
 install:
     - dir c:\Python27
-    - dir c:\Python27\bin
     - ps: appveyor\variables.ps1
     - ps: appveyor\install.ps1
+    - npm install
+    - npm rebuild zeromq --runtime=electron --target=1.8.4
+    - pip install -r requirements.txt
 
 build_script:
-    - dir c:\
+    - npm install
 
 test_script:
     - python appveyor\test.py --msvc %msvc%

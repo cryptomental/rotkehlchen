@@ -50,13 +50,6 @@ def check_interface_version(interface_name,
     return interface_version
 
 
-def check_python2_interface_version(version):
-    return check_interface_version('Python 2',
-                                   'python2 -c "import sys; print(sys.version)"',
-                                   '(\d+).(\d+).(\d+)',
-                                   version)
-
-
 def check_python3_interface_version(version):
     return check_interface_version('Python 3',
                                    'python3 -c "import sys; print(sys.version)"',
@@ -73,8 +66,6 @@ def check_tcl_interface_version(version):
 
 def check_interfaces(args):
     print('Checking interfaces...')
-    print("Python 2 interface: {0}".format(
-        check_python2_interface_version(args.python2_version)))
     print("Python 3 interface: {0}".format(
         check_python3_interface_version(args.python3_version)))
     print("Tcl interface: {0}".format(
@@ -82,10 +73,8 @@ def check_interfaces(args):
 
 
 def parse_arguments():
-    parser = argparse.ArgumentParser(description='Check Vim interfaces and '
+    parser = argparse.ArgumentParser(description='Check interfaces and '
                                                  'features.')
-    parser.add_argument('--python2-version', type=str,
-                        help='check Python2 version')
     parser.add_argument('--python3-version', type=str,
                         help='check Python3 version')
     parser.add_argument('--tcl-version', type=str,
