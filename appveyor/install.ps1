@@ -62,7 +62,7 @@ If ($env:arch -eq 32) {
 } Else {
     $python3_path = "C:\Python$python3_minimal_version-x64"
 }
-$env:PATH = "$python3_path;$env:PATH"
+$env:PATH = "$python3_path;$python3_path\Scripts;$env:PATH"
 
 # Download and install pip for Bintray script requirements.
 $pip_installer_name = "get-pip.py"
