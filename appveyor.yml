@@ -3,7 +3,7 @@ image: Visual Studio 2015
 
 environment:
     python2_version: 2.7.15
-    python3_version: 3.6.0
+    python3_version: 3.6.6
     tcl32_version: 8.6.6.8607
     tcl32_revision: 403667
     tcl64_version: 8.6.7.0
