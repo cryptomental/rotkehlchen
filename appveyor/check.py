@@ -52,14 +52,14 @@ def check_interface_version(interface_name,
 
 def check_python2_interface_version(version):
     return check_interface_version('Python 2',
-                                   'python print(sys.version)',
+                                   'python -c "import sys; print(sys.version)"',
                                    '(\d+).(\d+).(\d+)',
                                    version)
 
 
 def check_python3_interface_version(version):
     return check_interface_version('Python 3',
-                                   'python3 print(sys.version)',
+                                   'python3 -c "import sys; print(sys.version)"',
                                    '(\d+).(\d+).(\d+)',
                                    version)
 
