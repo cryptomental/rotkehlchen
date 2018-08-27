@@ -19,13 +19,16 @@ def get_major_minor_version(version):
         raise RuntimeError('Wrong version format: {0}'.format(version))
     return matches.group(1) + '.' + matches.group(2)
 
+def check_cmd(command):
+    return subprocess.check_output(
+        command, shell=True, stderr = subprocess.STDOUT).decode('utf8')
 
 def check_interface_version(interface_name,
                             command,
                             version_regex,
                             expected_version):
     try:
-        output = check_vim_command(command)
+        output = check_cmd(command)
     except subprocess.CalledProcessError as error:
         if not expected_version:
             return None
