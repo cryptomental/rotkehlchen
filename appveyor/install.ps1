@@ -25,10 +25,6 @@ If ($env:arch -eq 32) {
 $old_env = Get-Environment
 
 Invoke-CmdScript $vc_vars_script_path $vc_vars_arch
-Invoke-Expression "& win32\configure.bat"
-Invoke-Expression "& nmake .config.h.time"
-
-Restore-Environment $old_env
 
 
 #

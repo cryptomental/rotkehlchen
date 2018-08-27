@@ -52,29 +52,6 @@ def get_nmake_cmd(args):
     return [vc_vars_script_path, get_vc_mod(args.arch), '&', 'nmake.exe']
 
 
-def test_vim(args):
-    os.chdir(TESTS_DIR)
-
-    gvim_path = os.path.join(SOURCES_DIR, 'gvim')
-
-    # Register gvim in silent mode to avoid a dialog window when running the
-    # tests. Otherwise, this will stuck runs on CI services.
-    subprocess.check_call([gvim_path, '-silent', '-register'])
-
-    nmake_cmd = get_nmake_cmd(args)
-
-    test_cmd = nmake_cmd + ['-f', 'Make_dos.mak',
-                            'VIMPROG={0}'.format(gvim_path)]
-    if args.tests:
-        for test in args.tests:
-            root, _ = os.path.splitext(test)
-            test_cmd.append(root + '.res')
-        test_cmd.append('report')
-    try:
-        subprocess.check_call(test_cmd)
-    finally:
-        subprocess.check_call(nmake_cmd + ['-f', 'Make_dos.mak', 'clean'])
-
 
 def get_arch_from_python_interpreter():
     if platform.architecture()[0] == '64bit':
@@ -101,7 +78,6 @@ def parse_arguments():
 
 def main():
     args = parse_arguments()
-    test_vim(args)
 
 
 if __name__ == '__main__':
