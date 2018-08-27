@@ -17,8 +17,7 @@ install:
     - dir c:\Python27
     - ps: appveyor\variables.ps1
     - ps: appveyor\install.ps1
-    - npm install win-sqlcipher
-    - npm install
+    - pip install pysqlcipher
     - npm rebuild zeromq --runtime=electron --target=1.8.4
     - pip install -r requirements.txt
 
@@ -27,7 +26,7 @@ build_script:
 
 test_script:
     - python appveyor\test.py --msvc %msvc%
-    - python appveyor\check.py --python2-version %python2_version% --python3-version %python3_version% --tcl-version %tcl_version%
+    - python appveyor\check.py --python3-version %python3_version% --tcl-version %tcl_version%
 
 deploy_script:
     - dir c:\
