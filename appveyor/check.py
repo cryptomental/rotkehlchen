@@ -20,19 +20,6 @@ def get_major_minor_version(version):
     return matches.group(1) + '.' + matches.group(2)
 
 
-def check_vim_command(command):
-    vim_exe = os.path.join(SOURCES_DIR, 'vim.exe' )
-    return subprocess.check_output(
-        [vim_exe, '-i', 'NONE',
-                  '-u', 'NONE',
-                  '-U', 'NONE',
-                  '-nNes',
-                  '-c', 'set verbose=1',
-                  '-c', command,
-                  '-c', 'qall!'],
-                  stderr = subprocess.STDOUT).decode('utf8')
-
-
 def check_interface_version(interface_name,
                             command,
                             version_regex,
@@ -60,20 +47,6 @@ def check_interface_version(interface_name,
     return interface_version
 
 
-def check_lua_interface_version(version):
-    return check_interface_version('Lua',
-                                   'lua print(_VERSION)',
-                                   'Lua (\d+).(\d+)',
-                                   version)
-
-
-def check_perl_interface_version(version):
-    return check_interface_version('Perl',
-                                   'perl print $^V',
-                                   'v(\d+).(\d+).(\d+)',
-                                   version)
-
-
 def check_python2_interface_version(version):
     return check_interface_version('Python 2',
                                    'python print(sys.version)',
@@ -88,20 +61,6 @@ def check_python3_interface_version(version):
                                    version)
 
 
-def check_racket_interface_version(version):
-    return check_interface_version('Racket',
-                                   'mzscheme (display (version))',
-                                   '(\d+).(\d+)(?:.(\d+))?',
-                                   version)
-
-
-def check_ruby_interface_version(version):
-    return check_interface_version('Ruby',
-                                   'ruby puts RUBY_VERSION',
-                                   '(\d+).(\d+)',
-                                   version)
-
-
 def check_tcl_interface_version(version):
     return check_interface_version('Tcl',
                                    'tcl puts [info patchlevel]',
@@ -111,18 +70,10 @@ def check_tcl_interface_version(version):
 
 def check_interfaces(args):
     print('Checking interfaces...')
-    print('Lua interface: {0}'.format(
-        check_lua_interface_version(args.lua_version)))
-    print('Perl interface: {0}'.format(
-        check_perl_interface_version(args.perl_version)))
     print("Python 2 interface: {0}".format(
         check_python2_interface_version(args.python2_version)))
     print("Python 3 interface: {0}".format(
         check_python3_interface_version(args.python3_version)))
-    print("Racket interface: {0}".format(
-        check_racket_interface_version(args.racket_version)))
-    print("Ruby interface: {0}".format(
-        check_ruby_interface_version(args.ruby_version)))
     print("Tcl interface: {0}".format(
         check_tcl_interface_version(args.tcl_version)))
 
