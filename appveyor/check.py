@@ -78,35 +78,13 @@ def check_interfaces(args):
         check_tcl_interface_version(args.tcl_version)))
 
 
-def check_terminal_feature(feature):
-    command = ":terminal".format(feature)
-    try:
-        check_vim_command(command)
-        return True
-    except subprocess.CalledProcessError as error:
-        sys.exit(error.output.decode('utf8'))
-
-
-def check_features():
-    print('Checking features...')
-    print('Terminal feature: {0}'.format(check_terminal_feature('terminal')))
-
-
 def parse_arguments():
     parser = argparse.ArgumentParser(description='Check Vim interfaces and '
                                                  'features.')
-    parser.add_argument('--lua-version', type=str,
-                        help='check Lua version')
-    parser.add_argument('--perl-version', type=str,
-                        help='check Perl version')
     parser.add_argument('--python2-version', type=str,
                         help='check Python2 version')
     parser.add_argument('--python3-version', type=str,
                         help='check Python3 version')
-    parser.add_argument('--racket-version', type=str,
-                        help='check Racket version')
-    parser.add_argument('--ruby-version', type=str,
-                        help='check Ruby version')
     parser.add_argument('--tcl-version', type=str,
                         help='check Tcl version')
 
@@ -116,7 +94,6 @@ def parse_arguments():
 def main():
     args = parse_arguments()
     check_interfaces(args)
-    check_features()
 
 
 if __name__ == '__main__':
