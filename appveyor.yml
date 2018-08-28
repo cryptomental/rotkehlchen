@@ -17,6 +17,7 @@ install:
     - dir c:\Python27
     - ps: appveyor\variables.ps1
     - ps: appveyor\install.ps1
+    - npm install --save "@journeyapps/sqlcipher"
     - pip install pysqlcipher3
     - npm rebuild zeromq --runtime=electron --target=1.8.4
     - pip install -r requirements.txt
