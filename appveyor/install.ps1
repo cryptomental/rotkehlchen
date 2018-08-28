@@ -64,7 +64,7 @@ If ($env:arch -eq 32) {
 }
 $env:PATH = "$python3_path;$python3_path\Scripts;$env:PATH"
 
-$env:OPENSSL_CONF = "C:\\OpenSSL-Win32\\include\\"
+# $env:OPENSSL_CONF = "C:\\OpenSSL-Win32\\include\\"
 
 # Download and install pip for Bintray script requirements.
 $pip_installer_name = "get-pip.py"
