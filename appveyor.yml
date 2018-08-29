@@ -4,9 +4,9 @@ image: Visual Studio 2015
 environment:
     python2_version: 2.7.15
     python3_version: 3.6.6
-    tcl32_version: 8.6.6.8607
+    tcl32_version: 8.5.18.0
     tcl32_revision: 403667
-    tcl64_version: 8.6.7.0
+    tcl64_version: 8.5.18.0
     tcl64_revision: 404764
     matrix:
         - APPVEYOR_BUILD_WORKER_IMAGE: Visual Studio 2015
@@ -14,13 +14,13 @@ environment:
         - APPVEYOR_BUILD_WORKER_IMAGE: Visual Studio 2015
           arch: 64
 install:
-    - dir c:\Python27
+    - dir C:\
     - ps: appveyor\variables.ps1
     - ps: appveyor\install.ps1
     - npm install --save "@journeyapps/sqlcipher"
-    - pip install pysqlcipher3
-    - npm rebuild zeromq --runtime=electron --target=1.8.4
-    - pip install -r requirements.txt
+    - pip install --verbose pysqlcipher3
+#    - npm rebuild zeromq --runtime=electron --target=1.8.4
+#    - pip install -r requirements.txt
 
 build_script:
     - npm install
