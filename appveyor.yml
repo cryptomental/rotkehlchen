@@ -18,6 +18,7 @@ install:
     - ps: appveyor\variables.ps1
     - ps: appveyor\install.ps1
     - npm install --save "@journeyapps/sqlcipher"
+    - dir sqlite3.h /s
     - pip install --verbose pysqlcipher3
 #    - npm rebuild zeromq --runtime=electron --target=1.8.4
 #    - pip install -r requirements.txt
