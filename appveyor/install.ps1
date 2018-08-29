@@ -49,6 +49,15 @@ Start-Process "$tcl_output" -ArgumentList "/quiet /norestart" -Wait
 $env:tcl_path = "C:\ActiveTcl"
 $env:PATH = "$env:tcl_path\bin;$env:PATH"
 
+#
+# Install amalgamation
+
+$amalgamation_output = "$env:APPVEYOR_BUILD_FOLDER\downloads\sqlcipher-amalgamation-3020001.tar.gz"
+$amalgamation_url = "https://github.com/journeyapps/node-sqlcipher/blob/master/deps/sqlcipher-amalgamation-3020001.tar.gz"
+Invoke-Download $amalgamation_url $amalgamation_output
+Start-Process "7z" -ArgumentList "e $env:APPVEYOR_BUILD_FOLDER\downloads\sqlcipher-amalgamation-3020001.tar.gz" -Wait
+Start-Process "7z" -ArgumentList "x $env:APPVEYOR_BUILD_FOLDER\downloads\sqlcipher-amalgamation-3020001.tar" -Wait
+
 
 #
 # Configure Python.
