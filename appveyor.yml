@@ -19,8 +19,7 @@ install:
     - ps: appveyor\install.ps1
     - appveyor DownloadFile https://github.com/journeyapps/node-sqlcipher/blob/master/deps/sqlcipher-amalgamation-3020001.tar.gz
     - cd C:\projects\rotkehlchen\downloads\
-    - 7z e sqlcipher-amalgamation-3020001.tar.gz
-    - 7z x sqlcipher-amalgamation-3020001.tar
+    - tar xvzf sqlcipher-amalgamation-3020001.tar.gz
     - npm install --save "@journeyapps/sqlcipher"
     - dir sqlite3.h /s
     - pip install --verbose pysqlcipher3
