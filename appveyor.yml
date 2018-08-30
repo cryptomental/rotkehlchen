@@ -18,13 +18,17 @@ install:
     - ps: appveyor\variables.ps1
     - ps: appveyor\install.ps1
     - git clone https://github.com/journeyapps/node-sqlcipher.git
+    - git clone https://github.com/rigglemania/pysqlcipher3.git
     - tar -xvzf node-sqlcipher/deps/sqlcipher-amalgamation-3020001.tar.gz
     - dir sqlcipher-amalgamation-3020001
     - robocopy sqlcipher-amalgamation-3020001\ c:\python36\include\ & exit 0
+    - robocopy sqlcipher-amalgamation-3020001\ pysqlcipher3\amalgamation\ & exit 0
     - npm install --save "@journeyapps/sqlcipher"
     - dir sqlite3.h /s
-    - dir sqlcipher.lib /s
-    - pip install --verbose pysqlcipher3
+    - cd pysqlcipher3
+    - python setup.py build_amalgamation
+    - python setup.py install
+     
 #    - npm rebuild zeromq --runtime=electron --target=1.8.4
 #    - pip install -r requirements.txt
 
