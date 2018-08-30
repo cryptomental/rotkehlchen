@@ -1,3 +1,5 @@
+# Appveyor utils borrowed from excellent https://github.com/micbou/vim-for-windows
+
 # Download a file if not already existing.
 Function Invoke-Download {
     Param (

@@ -1,3 +1,5 @@
+# Appveyor setup borrowed from excellent https://github.com/micbou/vim-for-windows
+
 Function GetMajorMinorVersion($version) {
     $version_array = $version.Split('.')
     $version_array[0] + '.' + $version_array[1]

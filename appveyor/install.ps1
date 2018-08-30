@@ -1,3 +1,5 @@
+# Appveyor setup borrowed from excellent https://github.com/micbou/vim-for-windows
+
 $script_path = split-path -parent $MyInvocation.MyCommand.Definition
 . $script_path\utils.ps1
 
