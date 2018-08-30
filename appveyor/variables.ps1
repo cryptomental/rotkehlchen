@@ -14,7 +14,6 @@ If ($msvc -eq 2013) {
 
 $python2_major_minor_version = GetMajorMinorVersion $env:python2_version
 $python3_major_minor_version = GetMajorMinorVersion $env:python3_version
-$tcl_major_minor_version = GetMajorMinorVersion $tcl_version
 
 $logs = (git show -s --pretty=format:%b $env:appveyor_repo_tag_name) | Out-String
 # AppVeyor uses "\n" as a convention for newlines in GitHub description
