@@ -21,11 +21,11 @@ install:
     - git clone https://github.com/rigglemania/pysqlcipher3.git
     - tar -xvzf node-sqlcipher/deps/sqlcipher-amalgamation-3020001.tar.gz
     - dir sqlcipher-amalgamation-3020001
-    - robocopy sqlcipher-amalgamation-3020001\ c:\python36\include\ & exit 0
+#    - robocopy sqlcipher-amalgamation-3020001\ c:\python36\include\ & exit 0
     - robocopy sqlcipher-amalgamation-3020001\ pysqlcipher3\amalgamation\ & exit 0
     - robocopy sqlcipher-amalgamation-3020001\ c:\python36\include\sqlcipher\ & exit 0
-    - npm install --save "@journeyapps/sqlcipher"
-    - dir sqlite3.h /s
+#    - npm install --save "@journeyapps/sqlcipher"
+#    - dir sqlite3.h /s
     - cd pysqlcipher3
     - python setup.py build_amalgamation
     - python setup.py install
@@ -36,7 +36,6 @@ build_script:
     - npm install
 
 test_script:
-    - dir C:\Python27
     - npm config set python C:\Python27\python.exe
     - set PYTHON="C:\Python27\python.exe" 
     - npm rebuild zeromq --runtime=electron --target=1.8.4
@@ -44,5 +43,5 @@ test_script:
     - npm test
 
 deploy_script:
-    - dir c:\
+    - npm deploy
 
