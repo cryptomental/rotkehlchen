@@ -20,7 +20,7 @@ install:
     - git clone https://github.com/journeyapps/node-sqlcipher.git
     - tar -xvzf node-sqlcipher/deps/sqlcipher-amalgamation-3020001.tar.gz
     - dir sqlcipher-amalgamation-3020001
-    - robocopy sqlcipher-amalgamation-3020001\ c:\python36\include\
+    - robocopy sqlcipher-amalgamation-3020001\ c:\python36\include\ & exit 0
     - npm install --save "@journeyapps/sqlcipher"
     - dir sqlite3.h /s
     - pip install --verbose pysqlcipher3
