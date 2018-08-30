@@ -37,8 +37,8 @@ build_script:
     - npm install
 
 test_script:
-    - python appveyor\test.py --msvc %msvc%
-    - python appveyor\check.py --python3-version %python3_version% --tcl-version %tcl_version%
+    - PYTHON=C:\python27 node_modules\.bin\electron-rebuild
+    - npm test
 
 deploy_script:
     - dir c:\
