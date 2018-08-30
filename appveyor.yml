@@ -28,7 +28,8 @@ install:
     - dir sqlite3.h /s
     - cd pysqlcipher3
     - python setup.py build_amalgamation
-    - python setup.py install     
+    - python setup.py install
+    - cd ..     
     - npm rebuild zeromq --runtime=electron --target=1.8.4
     - pip install -r requirements.txt
 
