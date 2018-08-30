@@ -36,9 +36,10 @@ build_script:
     - npm install
 
 test_script:
-    - npm config set python python2.7
+    - dir C:\Python27
+    - npm config set python C:\Python27\python.exe
     - npm rebuild zeromq --runtime=electron --target=1.8.4
-    - node_modules\.bin\electron-rebuild
+    - PYTHON=python2.7 node_modules\.bin\electron-rebuild
     - npm test
 
 deploy_script:
