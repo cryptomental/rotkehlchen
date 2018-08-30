@@ -15,7 +15,6 @@ install:
     - tar -xvzf node-sqlcipher/deps/sqlcipher-amalgamation-3020001.tar.gz
     - robocopy sqlcipher-amalgamation-3020001\ pysqlcipher3\amalgamation\ & exit 0
     - robocopy sqlcipher-amalgamation-3020001\ c:\python36\include\sqlcipher\ & exit 0
-    - robocopy sqlcipher-amalgamation-3020001\ c:\python36-x64\include\sqlcipher\ & exit 0
     - cd pysqlcipher3
     - python setup.py build_amalgamation
     - python setup.py install
