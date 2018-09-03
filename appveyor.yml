@@ -34,3 +34,7 @@ test_script:
 deploy_script:
     - node_modules\.bin\electron-packager . --overwrite --ignore="rotkehlchen$" --ignore="rotkehlchen.egg-info" --ignore="tools$" --ignore=".*\.sh" --ignore=".*\.py"
 
+artifacts:
+    - path: **\*.log
+      name: logs
+
