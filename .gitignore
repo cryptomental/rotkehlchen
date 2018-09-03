@@ -13,5 +13,12 @@ rotkehlchen.log
 .pytest_cache
 ui/.ignore
 pytestdebug.log
+lib/
+bin/
 dist/
-.eggs
+.eggs/
+include/
+*.Python
+pip-selfcheck.json
+package-lock.json
+.env

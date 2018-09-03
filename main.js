@@ -5,6 +5,16 @@ const BrowserWindow = electron.BrowserWindow;
 const path = require('path');
 const fs = require('fs');
 
+if (process.env.NODE_ENV != 'production') {
+    require('electron-context-menu')({
+        prepend: (params, browserWindow) => [{
+            label: 'Rainbow',
+            // Only show it when right-clicking images
+            visible: params.mediaType === 'image'
+        }]
+    });
+}
+
 /*************************************************************
  * window management
  *************************************************************/
@@ -95,7 +105,7 @@ const createPyProc = () => {
     }
 
     pyProc.on('error', (err) => {
-        console.log('Failed to start python subprocess.');
+        console.error('Failed to start python subprocess.', err);
     });
     pyProc.on('exit', function (code, signal) {
         console.log("python subprocess killed with signal " + signal + " and code " +code);

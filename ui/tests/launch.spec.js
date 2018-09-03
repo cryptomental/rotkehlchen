@@ -1,16 +1,17 @@
 // Nice overview for electron tests with the chai.should model:
 // https://dzone.com/articles/write-automated-tests-for-electron-with-spectron-m
 
-const Application = require('spectron').Application;
-const electronPath = require('electron'); // Require Electron from the binaries included in node_modules.
-const path = require('path');
-const chaiAsPromised = require("chai-as-promised");
-const chai = require("chai");
-chai.should();
-chai.use(chaiAsPromised);
+const {
+    path, chai, Application, electronPath
+} = require('./utils/setup')
+
+const guid = () => {
+    const s4 = () => Math.floor((1 + Math.random()) * 0x10000).toString(16).substring(1)
+    return s4() + s4() + '-' + s4() + '-' + s4() + '-' + s4() + '-' + s4() + s4() + s4();
+}
 
 describe('Application launch', function () {
-    this.timeout(10000);
+  this.timeout(30000);
 
   beforeEach(function () {
     this.app = new Application({
@@ -30,8 +31,8 @@ describe('Application launch', function () {
       return this.app.client.getWindowCount().should.eventually.equal(1);
   });
 
-    it('make sure we get the loging popup', function () {
-        return this.app.client.waitForExist('.jconfirm-box-container', 5000).should.eventually.equal(true);
-    });
+  it('make sure we get the login popup', function () {
+    return this.app.client.waitForExist('.jconfirm-box-container', 5000).should.eventually.equal(true);
+  });
 
 });
