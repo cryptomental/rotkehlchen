@@ -99,9 +99,9 @@ const createPyProc = () => {
             log_and_quit('Unexpected executable name "' + executable + '" in the dist directory');
         }
         executable = path.join(dist_dir, executable);
-        pyProc = require('child_process').execFile(executable, ["--zerorpc-port", port, "--logfromothermodules", "--loglevel", "debug", "--logtarget", "stdout"]);
+        pyProc = require('child_process').execFile(executable, ["--zerorpc-port", port, "--logfromothermodules", "--loglevel", "debug"]);
     } else {
-        pyProc = require('child_process').spawn('python', ["-m", "rotkehlchen", "--zerorpc-port", port,"--logfromothermodules", "--loglevel", "debug", "--logtarget", "stdout"]);
+        pyProc = require('child_process').spawn('python', ["-m", "rotkehlchen", "--zerorpc-port", port,"--logfromothermodules", "--loglevel", "debug"]);
     }
 
     pyProc.on('error', (err) => {
